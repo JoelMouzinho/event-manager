@@ -1,0 +1,48 @@
+# ============================================
+# .htaccess - MyFoods-Eventplaner
+# ============================================
+
+# --- PHP-Fehleranzeige (nur für Entwicklung! In Produktion auf Off setzen) ---
+php_flag display_errors On
+php_value error_reporting E_ALL
+
+# --- .phtml als PHP-Datei behandeln ---
+AddType application/x-httpd-php .php .phtml
+
+# --- Standard-Startdatei festlegen ---
+DirectoryIndex index.php index.phtml index.html
+
+# --- Verzeichnisauflistung verbieten (Sicherheit) ---
+Options -Indexes
+
+# --- Zugriff auf versteckte Dateien verbieten (z.B. .env, .git) ---
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# --- mod_rewrite aktivieren (für spätere hübsche URLs, optional) ---
+<IfModule mod_rewrite.module>
+    RewriteEngine On
+</IfModule>
+
+# --- Eigene Fehlerseiten (optional, falls vorhanden) ---
+# ErrorDocument 404 /errors/404.php
+# ErrorDocument 500 /errors/500.php
+
+# --- Zeichensatz sicherstellen ---
+AddDefaultCharset UTF-8
+
+# --- Browser-Caching für statische Assets (Performance) ---
+<IfModule mod_expires.module>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# --- Kompression aktivieren (Performance) ---
+<IfModule mod_deflate.module>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript
+</IfModule>

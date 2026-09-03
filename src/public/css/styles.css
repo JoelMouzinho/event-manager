@@ -1,0 +1,747 @@
+/* Farbvariablen */
+:root {
+    --bg: #f4f6f8;
+    --text: #2c3e50;
+    --card: #ffffff;
+    --header: #ffffff;
+    --header-text: #2c3e50;
+    --sidebar: #f4f6f8;
+    --sidebar-btn: #ecf0f1;
+    --sidebar-text: #2c3e50;
+    --border: #dcdde1;
+    --theme-toggle: #2c3e50;
+    --primary-color: #ff6b35;
+}
+
+.dark {
+    --bg: #1e272e;
+    --text: #f5f6fa;
+    --card: #2f3640;
+    --header: #000000;
+    --header-text: #ffffff;
+    --sidebar: #1e272e;
+    --sidebar-btn: #2f3640;
+    --sidebar-text: #ffffff;
+    --border: #444;
+    --theme-toggle: #f5f6fa;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* Header */
+header {
+    display: flex;
+    /* Flexbox aktivieren */
+    align-items: center;
+    /* Vertikal zentrieren */
+    justify-content: space-between;
+    /* Abstand zwischen Logo+Titel und Toggle-Button */
+    background-color: var(--header);
+    color: var(--header-text);
+    padding: 10px 20px;
+    position: relative;
+}
+
+/* Logo und Titel links gruppieren */
+header .logo-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Abstand zwischen Logo und Titel */
+}
+
+header img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Titel anpassen */
+header h1 {
+    color: var(--header-text);
+    font-size: 2rem;
+    margin: 0;
+}
+
+header .logo-title a {
+    text-decoration: none;
+}
+
+header .logo-title a h1 {
+    text-decoration: none;
+}
+
+/* Navigation */
+nav ul {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    margin-left: 30px;
+    /* Abstand nach dem Logo/Titel */
+}
+
+nav a {
+    color: var(--header-text);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Toggle Button */
+#theme-toggle {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+#theme-toggle:hover {
+    transform: translateY(-2px) rotate(15deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.feature {
+    background-color: var(--card);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    /* Unterstrich entfernen */
+    color: inherit;
+    /* Textfarbe übernehmen */
+    display: block;
+}
+
+.feature h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    /* leicht nach oben bewegen */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Schatten verstärken */
+}
+
+/* Checkbox unsichtbar */
+.feature input[type="checkbox"] {
+    display: none;
+}
+
+/* Wenn ausgewählt: ganze Karte grün, Text weiß */
+.feature input[type="checkbox"]:checked+h3,
+.feature input[type="checkbox"]:checked+h3+p {
+    color: white;
+}
+
+/* Ganze Karte einfärben: Label selbst mit :has, modern */
+.feature:has(input[type="checkbox"]:checked) {
+    background-color: #4CAF50;
+    /* grün */
+    color: white;
+}
+
+/* Hover-Effekt */
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+/* Feature Card Links - Remove purple color and underline */
+.feature a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.feature a:visited {
+    color: inherit;
+}
+
+.feature a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* PDF Platzhalter */
+.pdf-placeholder {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: var(--bg);
+    text-align: center;
+}
+
+/* Input Feld */
+.menu-input {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 16px;
+    background-color: var(--card);
+    color: var(--text);
+}
+
+/* Fokus Effekt */
+.menu-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Inputs allgemein */
+.date-input,
+.time-input,
+.note-input {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 16px;
+    background-color: var(--card);
+    color: var(--text);
+}
+
+/* Fokus Effekt */
+.date-input:focus,
+.time-input:focus,
+.note-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Textarea Resize schöner */
+.note-input {
+    resize: vertical;
+}
+
+/* Speichern-Button */
+.save-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.success {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: var(--card);
+    color: var(--text);
+    border-top: 1px solid var(--border);
+}
+
+/* Authentifizierung */
+.auth-card {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-form label {
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--card);
+    color: var(--text);
+    font-size: 16px;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.auth-form .save-btn {
+    margin-top: 18px;
+}
+
+.auth-switch {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.auth-switch a {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.error-message {
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid #e74c3c;
+    border-radius: 8px;
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--text);
+}
+
+.auth-nav span {
+    opacity: 0.8;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    header .logo-title {
+        flex-wrap: wrap;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        margin-left: 0;
+    }
+}
+
+
+/* ============================================
+   Externe Startseite / Landing Page
+   ============================================ */
+
+body.landing-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(255, 107, 53, 0.16), transparent 35%),
+        var(--bg);
+}
+
+.landing {
+    width: 100%;
+    max-width: 1180px;
+    margin: auto;
+    padding: 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-card {
+    width: min(760px, 100%);
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 64px 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
+}
+
+.landing-logo {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+    margin-bottom: 18px;
+}
+
+.landing-eyebrow {
+    color: var(--primary-color);
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    font-size: 0.82rem;
+    margin-bottom: 18px;
+}
+
+.landing-card h1 {
+    font-size: clamp(2.3rem, 6vw, 4.4rem);
+    line-height: 1.05;
+    margin-bottom: 24px;
+}
+
+.landing-card h1 span {
+    color: var(--primary-color);
+}
+
+.landing-text {
+    max-width: 620px;
+    margin: 0 auto;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    color: var(--text);
+    opacity: 0.82;
+}
+
+.landing-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 34px;
+}
+
+.landing-btn {
+    display: inline-block;
+    min-width: 190px;
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.landing-btn:hover {
+    transform: translateY(-2px);
+}
+
+.landing-btn.primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.landing-btn.secondary {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.landing-note {
+    margin-top: 24px;
+    font-size: 0.9rem;
+    opacity: 0.65;
+}
+
+.auth-nav span {
+    max-width: 180px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================
+   User-Menü / Burger
+   ============================================ */
+
+.user-menu {
+    position: relative;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+
+/* Burger Button */
+
+.burger-btn {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background-color: var(--card);
+    color: var(--header-text);
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.burger-btn:hover {
+    background-color: var(--sidebar-btn);
+    border-color: var(--primary-color);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+    transform: translateY(-1px);
+}
+
+.burger-btn:active {
+    transform: scale(0.95);
+}
+
+
+/* Burger Linien */
+
+.burger-btn span {
+    display: block;
+
+    width: 21px;
+    height: 2px;
+
+    background-color: currentColor;
+
+    border-radius: 2px;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+/* Burger → X */
+
+.burger-btn[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.burger-btn[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-btn[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ============================================
+   Dropdown
+   ============================================ */
+
+.user-menu-dropdown {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    width: 270px;
+
+    padding: 8px;
+
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+
+    background-color: var(--card);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+
+    z-index: 2000;
+}
+
+.user-menu-dropdown.open {
+    display: flex;
+}
+
+
+/* ============================================
+   Benutzerinfo
+   ============================================ */
+
+.user-info {
+    padding: 11px 12px;
+}
+
+.user-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--text);
+
+    font-size: 11px;
+    font-weight: bold;
+
+    opacity: 0.55;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.user-email {
+    display: block;
+
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Trennlinie */
+
+.menu-divider {
+    height: 1px;
+
+    margin: 4px 6px;
+
+    background-color: var(--border);
+}
+
+
+/* ============================================
+   Dropdown Buttons / Links
+   ============================================ */
+
+.dropdown-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 11px 12px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: transparent;
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+
+    text-align: left;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--sidebar-btn);
+    color: var(--primary-color);
+}
+
+
+/* Logout */
+
+.logout-item {
+    margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+    header {
+        padding: 10px 15px;
+    }
+
+    header .logo-title {
+        flex-wrap: wrap;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        margin-left: 0;
+    }
+
+    .user-menu {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .user-menu-dropdown {
+        width: min(270px, calc(100vw - 30px));
+    }
+}
