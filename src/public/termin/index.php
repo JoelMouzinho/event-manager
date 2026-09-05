@@ -6,10 +6,11 @@ require_once __DIR__ . '/../includes/functions.php';
 
 requireLogin();
 
-$sessionId = getOrCreateSessionId();
+$userId = currentUserId();
+$eventId = getCurrentEventId($pdo, $userId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    saveEventData($pdo, $sessionId, [
+    saveEventData($pdo, $eventId, [
         'termin_date'    => $_POST['date'] ?? '',
         'termin_time'    => $_POST['time'] ?? '',
         'termin_endtime' => $_POST['endTime'] ?? '',
@@ -19,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$data = loadEventData($pdo, $sessionId);
+$data = loadEventData($pdo, $eventId);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -37,7 +38,7 @@ $data = loadEventData($pdo, $sessionId);
     <main>
         <section class="intro">
             <h2>Termin festlegen</h2>
-            <p>Wähle Datum und Uhrzeit für dein Event.</p>
+            <p>Event: <strong><?= htmlspecialchars($data['name']) ?></strong></p>
         </section>
 
         <?php if (isset($_GET['saved'])): ?>
@@ -45,17 +46,25 @@ $data = loadEventData($pdo, $sessionId);
         <?php endif; ?>
 
         <form method="post" action="index.php">
-            <label for="date">Datum:</label>
-            <input type="date" id="date" class="date-input" name="date"
-                value="<?= htmlspecialchars($data['termin_date']) ?>">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Datum:</label>
+                    <input type="date" id="date" class="date-input" name="date"
+                        value="<?= htmlspecialchars($data['termin_date']) ?>">
+                </div>
 
-            <label for="time">Startzeit:</label>
-            <input type="time" id="time" class="time-input" name="time"
-                value="<?= htmlspecialchars($data['termin_time']) ?>">
+                <div class="form-group">
+                    <label for="time">Startzeit:</label>
+                    <input type="time" id="time" class="time-input" name="time"
+                        value="<?= htmlspecialchars($data['termin_time']) ?>">
+                </div>
 
-            <label for="endTime">Endzeit:</label>
-            <input type="time" id="endTime" class="time-input" name="endTime"
-                value="<?= htmlspecialchars($data['termin_endtime']) ?>">
+                <div class="form-group">
+                    <label for="endTime">Endzeit:</label>
+                    <input type="time" id="endTime" class="time-input" name="endTime"
+                        value="<?= htmlspecialchars($data['termin_endtime']) ?>">
+                </div>
+            </div>
 
             <label for="notes">Notizen:</label>
             <textarea id="notes" class="note-input" name="notes" rows="4"><?= htmlspecialchars($data['termin_notes']) ?></textarea>

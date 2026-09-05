@@ -9,13 +9,15 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    is_admin TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS events (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    session_id VARCHAR(64) NOT NULL UNIQUE,
-    user_id INT NULL,
+    name VARCHAR(255) NOT NULL DEFAULT 'Mein Event',
+    session_id VARCHAR(64) NULL,
+    user_id INT NOT NULL,
     unterhaltung JSON DEFAULT NULL,
     mobilliar JSON DEFAULT NULL,
     menue VARCHAR(255) DEFAULT NULL,
@@ -29,6 +31,6 @@ CREATE TABLE IF NOT EXISTS events (
     INDEX idx_events_user_id (user_id),
     CONSTRAINT fk_events_user
         FOREIGN KEY (user_id) REFERENCES users(id)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );

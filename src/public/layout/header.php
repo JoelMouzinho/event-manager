@@ -1,4 +1,16 @@
 <header>
+    <?php
+    $currentPage = basename(dirname($_SERVER['SCRIPT_FILENAME']));
+    $navItems = [
+        ['path' => '../events/index.php', 'label' => 'Meine Events', 'page' => 'events'],
+        ['path' => '../unterhaltung/index.php', 'label' => 'Unterhaltung', 'page' => 'unterhaltung'],
+        ['path' => '../mobilliar/index.php', 'label' => 'Mobilliar', 'page' => 'mobilliar'],
+        ['path' => '../menue/index.php', 'label' => 'Menü', 'page' => 'menue'],
+        ['path' => '../energieversorgung/index.php', 'label' => 'Energieversorgung', 'page' => 'energieversorgung'],
+        ['path' => '../termin/index.php', 'label' => 'Termin', 'page' => 'termin'],
+        ['path' => '../uebersicht/index.php', 'label' => 'Übersicht', 'page' => 'uebersicht'],
+    ];
+    ?>
     <div class="logo-title">
         <a href="<?= isLoggedIn() ? '../home/index.php' : '../index.php' ?>">
             <img src="../assets/icon32x32.png" alt="Event-Manager">
@@ -9,14 +21,16 @@
         </a>
 
         <?php if (isLoggedIn()): ?>
-            <nav>
+            <nav aria-label="Hauptnavigation">
                 <ul>
-                    <li><a href="../unterhaltung/index.php">Unterhaltung</a></li>
-                    <li><a href="../mobilliar/index.php">Mobilliar</a></li>
-                    <li><a href="../menue/index.php">Menü</a></li>
-                    <li><a href="../energieversorgung/index.php">Energieversorgung</a></li>
-                    <li><a href="../termin/index.php">Termin</a></li>
-                    <li><a href="../uebersicht/index.php">Übersicht</a></li>
+                    <?php foreach ($navItems as $item): ?>
+                        <li>
+                            <a href="<?= $item['path'] ?>" class="<?= $currentPage === $item['page'] ? 'active' : '' ?>"
+                                <?= $currentPage === $item['page'] ? 'aria-current="page"' : '' ?>>
+                                <?= htmlspecialchars($item['label']) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </nav>
         <?php endif; ?>
@@ -24,13 +38,8 @@
 
     <?php if (isLoggedIn()): ?>
         <div class="user-menu">
-            <button
-                id="user-menu-toggle"
-                class="burger-btn"
-                type="button"
-                aria-label="Benutzermenü öffnen"
-                aria-expanded="false"
-            >
+            <button id="user-menu-toggle" class="burger-btn" type="button" aria-label="Benutzermenü öffnen"
+                aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -51,6 +60,16 @@
                     <span>🌙</span>
                     <span>Theme wechseln</span>
                 </button>
+
+                <?php if (isAdmin($pdo, (int) currentUserId())): ?>
+                    <div class="menu-divider"></div>
+                    <a href="../admin/index.php" class="dropdown-item">
+                        <span>🛡️</span>
+                        <span>Admin-Dashboard</span>
+                    </a>
+                <?php endif; ?>
+
+                <div class="menu-divider"></div>
 
                 <a href="../logout/index.php" class="dropdown-item logout-item">
                     <span>↪</span>

@@ -1,9 +1,14 @@
 <?php
 session_start();
-
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 requireLogin();
+
+$userId = currentUserId();
+$eventId = getCurrentEventId($pdo, $userId);
+$data = loadEventData($pdo, $eventId);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -21,9 +26,9 @@ requireLogin();
 
     <main>
         <section class="intro">
-            <h2>Willkommen beim Eventplaner</h2>
-            <p>Organisiere deine Events einfach und übersichtlich. Nutze die Navigation, um alle Bereiche deines Events
-                zu planen.</p>
+            <h2><?= htmlspecialchars($data['name']) ?></h2>
+            <p>Nutze die Navigation, um alle Bereiche deines Events zu planen.</p>
+            <p><a href="../events/index.php" class="back-link">← Zurück zu Meine Events</a></p>
         </section>
 
         <section class="features">

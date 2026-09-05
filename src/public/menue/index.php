@@ -6,16 +6,17 @@ require_once __DIR__ . '/../includes/functions.php';
 
 requireLogin();
 
-$sessionId = getOrCreateSessionId();
+$userId = currentUserId();
+$eventId = getCurrentEventId($pdo, $userId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $menue = trim($_POST['menue'] ?? '');
-    saveEventData($pdo, $sessionId, ['menue' => $menue]);
+    saveEventData($pdo, $eventId, ['menue' => $menue]);
     header('Location: index.php?saved=1');
     exit;
 }
 
-$data = loadEventData($pdo, $sessionId);
+$data = loadEventData($pdo, $eventId);
 $menue = $data['menue'];
 ?>
 <!DOCTYPE html>
@@ -34,7 +35,7 @@ $menue = $data['menue'];
     <main>
         <section class="intro">
             <h2>Menü erstellen</h2>
-            <p>Trage dein individuelles Menü für die Gäste ein.</p>
+            <p>Event: <strong><?= htmlspecialchars($data['name']) ?></strong></p>
         </section>
 
         <?php if (isset($_GET['saved'])): ?>

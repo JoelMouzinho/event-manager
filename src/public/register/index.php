@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 if (isLoggedIn()) {
-    header('Location: ../home/index.php');
+    header('Location: ../events/index.php');
     exit;
 }
 
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $userId;
                 $_SESSION['user_email'] = $email;
 
-                header('Location: ../home/index.php');
+                header('Location: ../events/index.php');
                 exit;
             } catch (PDOException $e) {
                 if ($pdo->inTransaction()) {

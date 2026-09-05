@@ -6,16 +6,17 @@ require_once __DIR__ . '/../includes/functions.php';
 
 requireLogin();
 
-$sessionId = getOrCreateSessionId();
+$userId = currentUserId();
+$eventId = getCurrentEventId($pdo, $userId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selected = $_POST['entertainment'] ?? [];
-    saveEventData($pdo, $sessionId, ['unterhaltung' => $selected]);
+    saveEventData($pdo, $eventId, ['unterhaltung' => $selected]);
     header('Location: index.php?saved=1');
     exit;
 }
 
-$data = loadEventData($pdo, $sessionId);
+$data = loadEventData($pdo, $eventId);
 $selectedUnterhaltung = $data['unterhaltung'];
 
 function isChecked(array $selected, string $value): string
@@ -39,7 +40,7 @@ function isChecked(array $selected, string $value): string
     <main>
         <section class="intro">
             <h2>Unterhaltung auswählen</h2>
-            <p>Wähle aus, welche Unterhaltung für dein Event sorgen soll.</p>
+            <p>Event: <strong><?= htmlspecialchars($data['name']) ?></strong></p>
         </section>
 
         <?php if (isset($_GET['saved'])): ?>

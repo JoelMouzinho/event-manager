@@ -30,6 +30,31 @@ function requireLogin(): void
     }
 }
 
+/**
+ * Prüft, ob ein Nutzer Admin-Rechte hat.
+ */
+function isAdmin(PDO $pdo, int $userId): bool
+{
+    $stmt = $pdo->prepare('SELECT is_admin FROM users WHERE id = :id');
+    $stmt->execute(['id' => $userId]);
+    $row = $stmt->fetch();
+
+    return $row && (bool) $row['is_admin'];
+}
+
+/**
+ * Erzwingt Login + Admin-Rechte. Nicht-Admins landen zurück auf "Meine Events".
+ */
+function requireAdmin(PDO $pdo): void
+{
+    requireLogin();
+
+    if (!isAdmin($pdo, (int) currentUserId())) {
+        header('Location: /events/index.php');
+        exit;
+    }
+}
+
 function csrfToken(): string
 {
     if (empty($_SESSION['csrf_token'])) {
@@ -44,62 +69,6 @@ function verifyCsrfToken(?string $token): bool
     return is_string($token)
         && isset($_SESSION['csrf_token'])
         && hash_equals($_SESSION['csrf_token'], $token);
-}
-
-/**
- * Verknüpft das aktuelle Event mit einem Benutzer.
- * Ein bereits einem anderen Benutzer gehörendes Event wird niemals übernommen.
- */
-function claimCurrentEvent(PDO $pdo, int $userId, string $sessionId): void
-{
-    $stmt = $pdo->prepare(
-        'UPDATE events
-         SET user_id = :user_id
-         WHERE session_id = :session_id
-           AND (user_id IS NULL OR user_id = :user_id)'
-    );
-    $stmt->execute([
-        'user_id' => $userId,
-        'session_id' => $sessionId,
-    ]);
-}
-
-/**
- * Beim Login: Falls die aktuelle Browser-Session noch ein anonymes Event enthält,
- * wird dieses Event dem eingeloggten Benutzer zugeordnet.
- * Falls dort noch kein Event existiert, wird das zuletzt gespeicherte Event des
- * Benutzers als aktuelles Event in der Browser-Session verwendet.
- */
-function restoreUserEventSession(PDO $pdo, int $userId): void
-{
-    $sessionId = $_SESSION['event_session_id'] ?? null;
-
-    if ($sessionId !== null) {
-        $stmt = $pdo->prepare('SELECT id, user_id FROM events WHERE session_id = :session_id LIMIT 1');
-        $stmt->execute(['session_id' => $sessionId]);
-        $currentEvent = $stmt->fetch();
-
-        if ($currentEvent && ($currentEvent['user_id'] === null || (int) $currentEvent['user_id'] === $userId)) {
-            claimCurrentEvent($pdo, $userId, $sessionId);
-            return;
-        }
-    }
-
-    $stmt = $pdo->prepare(
-        'SELECT session_id
-         FROM events
-         WHERE user_id = :user_id
-         ORDER BY updated_at DESC, id DESC
-         LIMIT 1'
-    );
-    $stmt->execute(['user_id' => $userId]);
-    $latestEvent = $stmt->fetch();
-
-    if ($latestEvent) {
-        $_SESSION['event_session_id'] = $latestEvent['session_id'];
-    } else {
-        unset($_SESSION['event_session_id']);
-    }
 }
 
 function logoutUser(): void

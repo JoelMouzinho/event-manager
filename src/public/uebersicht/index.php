@@ -6,30 +6,31 @@ require_once __DIR__ . '/../includes/functions.php';
 
 requireLogin();
 
-$sessionId = getOrCreateSessionId();
-$data = loadEventData($pdo, $sessionId);
+$userId = currentUserId();
+$eventId = getCurrentEventId($pdo, $userId);
+$data = loadEventData($pdo, $eventId);
 
 $unterhaltungLabels = [
-    'sound'   => '🎵 Sound / Musik',
-    'tv'      => '📺 TV / Filme',
+    'sound' => '🎵 Sound / Musik',
+    'tv' => '📺 TV / Filme',
     'karaoke' => '🎤 Karaoke',
-    'band'    => '🎸 Live Band',
-    'spiele'  => '🎮 Spiele / Quiz',
-    'comedy'  => '🎭 Comedy / Show',
+    'band' => '🎸 Live Band',
+    'spiele' => '🎮 Spiele / Quiz',
+    'comedy' => '🎭 Comedy / Show',
 ];
 $mobilliarLabels = [
     'stuehle' => '🪑 Stühle',
-    'tische'  => '📋 Tische',
-    'grill'   => '🔥 Grill',
-    'bar'     => '🍹 Bar',
+    'tische' => '📋 Tische',
+    'grill' => '🔥 Grill',
+    'bar' => '🍹 Bar',
 ];
 $energieLabels = [
     'stromanschluss' => '⚡ Stromanschluss',
-    'generator'      => '⚙️ Generator',
-    'verlaengerung'  => '🔌 Verlängerungskabel',
-    'beleuchtung'    => '💡 Beleuchtung',
-    'notstrom'       => '🆘 Notstrom',
-    'technik'        => '🎚️ Technik-Anschlüsse',
+    'generator' => '⚙️ Generator',
+    'verlaengerung' => '🔌 Verlängerungskabel',
+    'beleuchtung' => '💡 Beleuchtung',
+    'notstrom' => '🆘 Notstrom',
+    'technik' => '🎚️ Technik-Anschlüsse',
 ];
 ?>
 <!DOCTYPE html>
@@ -48,67 +49,79 @@ $energieLabels = [
     <?php include '../layout/header.php'; ?>
 
     <main>
-        <h2>Übersicht</h2>
+        <section class="intro">
+            <h2><?= htmlspecialchars($data['name']) ?> - Übersicht</h2>
+            <p>Alle Infos zu deinem Event auf einen Blick.</p>
+        </section>
 
-        <section>
-            <h3>Unterhaltung</h3>
-            <ul>
+        <section class="features">
+
+            <div class="overview-card">
+                <h3>🎉 Unterhaltung</h3>
                 <?php if (!empty($data['unterhaltung'])): ?>
-                    <?php foreach ($data['unterhaltung'] as $item): ?>
-                        <li><?= htmlspecialchars($unterhaltungLabels[$item] ?? $item) ?></li>
-                    <?php endforeach; ?>
+                    <ul class="overview-list">
+                        <?php foreach ($data['unterhaltung'] as $item): ?>
+                            <li><?= htmlspecialchars($unterhaltungLabels[$item] ?? $item) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
                 <?php else: ?>
-                    <li style="color:#999;">Keine Auswahl getroffen</li>
+                    <p class="overview-empty">Keine Auswahl getroffen</p>
                 <?php endif; ?>
-            </ul>
-        </section>
+            </div>
 
-        <section>
-            <h3>Mobilliar</h3>
-            <ul>
+            <div class="overview-card">
+                <h3>🪑 Mobiliar</h3>
                 <?php if (!empty($data['mobilliar'])): ?>
-                    <?php foreach ($data['mobilliar'] as $item): ?>
-                        <li><?= htmlspecialchars($mobilliarLabels[$item] ?? $item) ?></li>
-                    <?php endforeach; ?>
+                    <ul class="overview-list">
+                        <?php foreach ($data['mobilliar'] as $item): ?>
+                            <li><?= htmlspecialchars($mobilliarLabels[$item] ?? $item) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
                 <?php else: ?>
-                    <li style="color:#999;">Keine Auswahl getroffen</li>
+                    <p class="overview-empty">Keine Auswahl getroffen</p>
                 <?php endif; ?>
-            </ul>
-        </section>
+            </div>
 
-        <section>
-            <h3>Menü</h3>
-            <p><?= $data['menue'] ? '📄 Menü: ' . htmlspecialchars($data['menue']) : '❌ Kein Menü gewählt' ?></p>
-        </section>
+            <div class="overview-card">
+                <h3>📄 Menü</h3>
+                <?php if ($data['menue']): ?>
+                    <p><?= htmlspecialchars($data['menue']) ?></p>
+                <?php else: ?>
+                    <p class="overview-empty">Kein Menü gewählt</p>
+                <?php endif; ?>
+            </div>
 
-        <section>
-            <h3>Energieversorgung</h3>
-            <ul>
+            <div class="overview-card">
+                <h3>⚡ Energieversorgung</h3>
                 <?php if (!empty($data['energie'])): ?>
-                    <?php foreach ($data['energie'] as $item): ?>
-                        <li><?= htmlspecialchars($energieLabels[$item] ?? $item) ?></li>
-                    <?php endforeach; ?>
+                    <ul class="overview-list">
+                        <?php foreach ($data['energie'] as $item): ?>
+                            <li><?= htmlspecialchars($energieLabels[$item] ?? $item) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
                 <?php else: ?>
-                    <li style="color:#999;">Keine Auswahl getroffen</li>
+                    <p class="overview-empty">Keine Auswahl getroffen</p>
                 <?php endif; ?>
-            </ul>
-        </section>
+            </div>
 
-        <section>
-            <h3>Termin</h3>
-            <?php if ($data['termin_date'] && $data['termin_time']): ?>
-                <p>
-                    📅 <?= htmlspecialchars($data['termin_date']) ?> um <?= htmlspecialchars($data['termin_time']) ?>
-                    <?php if ($data['termin_endtime']): ?>
-                        - <?= htmlspecialchars($data['termin_endtime']) ?>
-                    <?php endif; ?>
-                </p>
-            <?php else: ?>
-                <p>❌ Kein Termin festgelegt</p>
-            <?php endif; ?>
-            <?php if ($data['termin_notes']): ?>
-                <p>📝 Notizen: <?= nl2br(htmlspecialchars($data['termin_notes'])) ?></p>
-            <?php endif; ?>
+            <div class="overview-card overview-termin">
+                <h3>📅 Termin</h3>
+                <?php if ($data['termin_date'] && $data['termin_time']): ?>
+                    <p>
+                        <?= htmlspecialchars($data['termin_date']) ?> um <?= htmlspecialchars($data['termin_time']) ?>
+                        <?php if ($data['termin_endtime']): ?>
+                            – <?= htmlspecialchars($data['termin_endtime']) ?>
+                        <?php endif; ?>
+                    </p>
+                <?php else: ?>
+                    <p class="overview-empty">Kein Termin festgelegt</p>
+                <?php endif; ?>
+
+                <?php if ($data['termin_notes']): ?>
+                    <div class="overview-notes">📝 <?= nl2br(htmlspecialchars($data['termin_notes'])) ?></div>
+                <?php endif; ?>
+            </div>
+
         </section>
     </main>
 
