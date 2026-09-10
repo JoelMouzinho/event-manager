@@ -59,20 +59,19 @@
 
                 <div class="menu-divider"></div>
 
-                <a href="../events/index.php" class="dropdown-item">
-                    <span>📊</span>
-                    <span>Mein Dashboard</span>
-                </a>
-
-                <div class="menu-divider"></div>
-
                 <button id="theme-toggle" type="button" class="dropdown-item">
                     <span>🌙</span>
                     <span>Theme wechseln</span>
                 </button>
 
+                <div class="menu-divider"></div>
+
+                <a href="../events/index.php" class="dropdown-item">
+                    <span>📊</span>
+                    <span>Mein Dashboard</span>
+                </a>
+
                 <?php if (isAdmin($pdo, (int) currentUserId())): ?>
-                    <div class="menu-divider"></div>
                     <a href="../admin/index.php" class="dropdown-item">
                         <span>🛡️</span>
                         <span>Admin-Dashboard</span>
