@@ -1,11 +1,10 @@
 <header>
     <div class="logo-title">
         <a href="<?= isLoggedIn() ? '../home/index.php' : '../index.php' ?>">
-            <img src="../assets/icon32x32.png" alt="Event-Manager">
         </a>
 
         <a href="<?= isLoggedIn() ? '../home/index.php' : '../index.php' ?>">
-            <h1>Event-Manager</h1>
+            <h1>ITKFA Event-Manager</h1>
         </a>
 
         <?php if (isLoggedIn()): ?>
