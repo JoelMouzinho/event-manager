@@ -85,52 +85,35 @@ textarea:focus-visible {
 /* Header */
 header {
     display: flex;
+    /* Flexbox aktivieren */
     align-items: center;
+    /* Vertikal zentrieren */
     justify-content: space-between;
-    gap: 24px;
-    min-height: 76px;
-    padding: 10px 20px;
+    /* Abstand zwischen Logo+Titel und Toggle-Button */
     background-color: var(--header);
     color: var(--header-text);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    padding: 10px 20px;
     position: relative;
-    z-index: 1000;
 }
 
-/* Logo + Titel */
+/* Logo und Titel links gruppieren */
 header .logo-title {
     display: flex;
     align-items: center;
-    gap: 14px;
-    min-width: 0;
+    gap: 15px;
+    /* Abstand zwischen Logo und Titel */
 }
 
 header img {
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
 }
 
+/* Titel anpassen */
 header h1 {
     color: var(--header-text);
-    font-size: 1.55rem;
+    font-size: 2rem;
     margin: 0;
-    white-space: nowrap;
-}
-
-header .logo-title>a:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-header .logo-title>a:first-child:hover {
-    transform: translateY(-1px);
-    background-color: var(--sidebar-btn);
 }
 
 header .logo-title a {
@@ -142,57 +125,25 @@ header .logo-title a h1 {
 }
 
 /* Navigation */
-nav {
-    margin-left: 14px;
-}
-
 nav ul {
     display: flex;
-    align-items: center;
-    gap: 4px;
+    gap: 15px;
     list-style: none;
-    margin: 0;
-    padding: 4px;
-    background-color: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    margin-left: 30px;
+    /* Abstand nach dem Logo/Titel */
 }
 
 nav a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 38px;
-    padding: 7px 12px;
-    border-radius: 10px;
     color: var(--header-text);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
-    white-space: nowrap;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: bold;
 }
 
 nav a:hover {
-    background-color: var(--card);
-    color: var(--primary-color);
-    transform: translateY(-1px);
-}
-
-nav a.active,
-nav a[aria-current="page"] {
-    background-color: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 3px 10px rgba(255, 107, 53, 0.25);
-}
-
-nav a.active:hover,
-nav a[aria-current="page"]:hover {
-    color: #fff;
-    background-color: var(--primary-color);
+    text-decoration: underline;
 }
 
 /* Toggle Button */
-
 #theme-toggle {
     background-color: var(--card);
     border: 1px solid var(--border);
@@ -380,20 +331,36 @@ main {
 
 /* Speichern-Button */
 .save-btn {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), #ff8c5a);
     color: white;
     border: none;
     padding: 12px 30px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 3px 10px rgba(255, 107, 53, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .save-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 16px rgba(255, 107, 53, 0.45);
+    filter: brightness(1.05);
+}
+
+.save-btn:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 2px 6px rgba(255, 107, 53, 0.35);
+}
+
+.save-btn:disabled {
+    background: var(--border);
+    color: var(--text);
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
 .success {
@@ -476,24 +443,13 @@ footer {
 }
 
 @media (max-width: 900px) {
-    header {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
     header .logo-title {
         flex-wrap: wrap;
     }
 
-    nav {
-        width: 100%;
-        margin-left: 0;
-        order: 3;
-    }
-
     nav ul {
         flex-wrap: wrap;
-        justify-content: center;
+        margin-left: 0;
     }
 }
 
@@ -618,6 +574,9 @@ body.landing-page {
     position: relative;
     margin-left: auto;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 
@@ -838,7 +797,7 @@ body.landing-page {
 
     nav ul {
         flex-wrap: wrap;
-        justify-content: center;
+        margin-left: 0;
     }
 
     .user-menu {
@@ -848,21 +807,12 @@ body.landing-page {
 
 @media (max-width: 600px) {
     header h1 {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
 
     header img {
-        width: 46px;
-        height: 46px;
-    }
-
-    nav a {
-        font-size: 13px;
-        padding: 6px 9px;
-    }
-
-    nav ul {
-        border-radius: 12px;
+        width: 70px;
+        height: 70px;
     }
 
     .user-menu-dropdown {
@@ -889,19 +839,24 @@ body.landing-page {
 
 .event-delete-btn {
     background-color: transparent;
-    border: 1px solid #e74c3c;
+    border: 1.5px solid #e74c3c;
     color: #e74c3c;
     cursor: pointer;
     font-size: 13px;
     font-weight: bold;
     padding: 6px 16px;
     border-radius: 20px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .event-delete-btn:hover {
     background-color: #e74c3c;
     color: white;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.event-delete-btn:active {
+    transform: scale(0.95);
 }
 
 /* "Zurück zu Meine Events" Link */
@@ -910,21 +865,27 @@ body.landing-page {
     align-items: center;
     gap: 6px;
     margin-top: 10px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     border-radius: 20px;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     background-color: var(--card);
     color: var(--text);
     text-decoration: none;
     font-size: 14px;
     font-weight: bold;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .back-link:hover {
     transform: translateX(-3px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.back-link:active {
+    transform: translateX(-1px) scale(0.97);
 }
 
 /* Formularfelder nebeneinander (z.B. Datum/Startzeit/Endzeit) */
@@ -1073,13 +1034,13 @@ body.landing-page {
 
 .admin-link-btn {
     background: none;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     color: var(--text);
     cursor: pointer;
     font-size: 13px;
     padding: 6px 14px;
     border-radius: 20px;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    transition: transform 0.15s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .admin-link-btn:hover {
@@ -1087,9 +1048,216 @@ body.landing-page {
     color: var(--primary-color);
 }
 
+.admin-link-btn:active {
+    transform: scale(0.95);
+}
+
 @media (max-width: 600px) {
     .admin-actions {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+/* Navigation zur nächsten/vorherigen Unterseite (Wizard-Flow) */
+.step-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background-color: var(--card);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.next-link:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.next-link:active {
+    transform: translateX(1px) scale(0.97);
+}
+
+/* ============================================
+   Event-Ablehnung
+   ============================================ */
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-badge.rejected {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.reject-banner {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    padding: 16px 18px;
+    border: 1px solid #e74c3c;
+    border-radius: 10px;
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--text);
+}
+
+.reject-banner strong {
+    color: #e74c3c;
+}
+
+.reject-form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reject-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 15px;
+    background-color: var(--card);
+    color: var(--text);
+    resize: vertical;
+}
+
+.reject-form textarea:focus {
+    outline: none;
+    border-color: #e74c3c;
+}
+
+.reject-btn {
+    background-color: transparent;
+    border: 1.5px solid #e74c3c;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 24px;
+    border-radius: 20px;
+    transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.reject-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.reject-btn:active {
+    transform: scale(0.96);
+}
+
+/* Schnell ein neues Event anlegen (Header) */
+.quick-add-btn {
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(255, 107, 53, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.quick-add-btn:hover {
+    transform: translateY(-2px) rotate(90deg);
+    box-shadow: 0 6px 16px rgba(255, 107, 53, 0.45);
+    filter: brightness(1.05);
+}
+
+.quick-add-btn:active {
+    transform: scale(0.92);
+}
+
+/* Quick-Add Panel (Neues Event über den Header) */
+.quick-add-menu {
+    position: relative;
+}
+
+.quick-add-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 260px;
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    z-index: 2000;
+}
+
+.quick-add-panel.open {
+    display: flex;
+}
+
+.quick-add-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quick-add-panel label {
+    font-size: 13px;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+.quick-add-panel input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+}
+
+.quick-add-panel input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.quick-add-panel .save-btn {
+    margin-top: 4px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .quick-add-panel {
+        width: min(260px, calc(100vw - 30px));
     }
 }

@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $events = getUserEvents($pdo, $userId);
+$account = getUserAccountInfo($pdo, $userId);
+$dashboardStats = getUserDashboardStats($pdo, $userId);
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -32,7 +34,7 @@ $events = getUserEvents($pdo, $userId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meine Events - Event-Manager</title>
+    <title>Mein Dashboard - Event-Manager</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" type="image/x-icon" href="../assets/icon32x32nameless.png">
 </head>
@@ -43,13 +45,58 @@ $events = getUserEvents($pdo, $userId);
 
     <main>
         <section class="intro">
-            <h2>Meine Events</h2>
-            <p>Wähle ein bestehendes Event oder lege ein neues an.</p>
+            <h2>Mein Dashboard</h2>
+            <p>Übersicht über deine Events und dein Konto.</p>
         </section>
 
         <?php if ($error !== ''): ?>
             <div class="error-message" style="max-width:400px; margin:0 auto 20px;"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
+
+        <section class="features">
+            <div class="overview-card">
+                <h3>🎉 Meine Events</h3>
+                <p style="font-size:32px; font-weight:bold; color:var(--primary-color);">
+                    <?= $dashboardStats['eventCount'] ?></p>
+            </div>
+
+            <div class="overview-card">
+                <h3>🚫 Abgelehnt</h3>
+                <p style="font-size:32px; font-weight:bold; color:var(--primary-color);">
+                    <?= $dashboardStats['rejectedCount'] ?></p>
+            </div>
+
+            <?php if ($dashboardStats['nextEvent']): ?>
+                <a href="../home/index.php?event_id=<?= (int) $dashboardStats['nextEvent']['id'] ?>"
+                    class="feature overview-card" style="text-align:left;">
+                    <h3>⏰ Nächster Termin</h3>
+                    <p style="font-weight:bold;"><?= htmlspecialchars($dashboardStats['nextEvent']['name']) ?></p>
+                    <p>
+                        <?= htmlspecialchars($dashboardStats['nextEvent']['termin_date']) ?>
+                        <?php if ($dashboardStats['nextEvent']['termin_time']): ?>
+                            um <?= htmlspecialchars($dashboardStats['nextEvent']['termin_time']) ?>
+                        <?php endif; ?>
+                    </p>
+                </a>
+            <?php else: ?>
+                <div class="overview-card">
+                    <h3>⏰ Nächster Termin</h3>
+                    <p class="overview-empty">Kein anstehender Termin.</p>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($account): ?>
+                <div class="overview-card">
+                    <h3>👤 Mein Konto</h3>
+                    <p><?= htmlspecialchars($account['email']) ?></p>
+                    <p class="overview-empty">Mitglied seit <?= htmlspecialchars($account['created_at']) ?></p>
+                </div>
+            <?php endif; ?>
+        </section>
+
+        <section class="intro" style="margin-top:50px;">
+            <h2 style="font-size:1.4rem;">Alle meine Events</h2>
+        </section>
 
         <form method="post" action="index.php" class="auth-form" style="max-width:400px; margin:0 auto 40px;">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
@@ -76,8 +123,12 @@ $events = getUserEvents($pdo, $userId);
                                     Noch kein Termin
                                 <?php endif; ?>
                             </p>
+                            <?php if ($event['rejected_at']): ?>
+                                <p style="margin-top:8px;"><span class="status-badge rejected">Abgelehnt</span></p>
+                            <?php endif; ?>
                         </a>
-                        <form method="post" action="index.php" class="event-delete-form" onsubmit="return confirm('Dieses Event wirklich löschen?');">
+                        <form method="post" action="index.php" class="event-delete-form"
+                            onsubmit="return confirm('Dieses Event wirklich löschen?');">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="event_id" value="<?= (int) $event['id'] ?>">

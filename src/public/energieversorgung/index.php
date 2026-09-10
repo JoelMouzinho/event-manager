@@ -90,6 +90,7 @@ function isChecked(array $selected, string $value): string
 
             <div style="text-align:center; margin-top:30px;">
                 <button type="submit" class="save-btn">Speichern</button>
+                <a href="../termin/index.php" class="next-link">Weiter zu Termin →</a>
             </div>
         </form>
     </main>

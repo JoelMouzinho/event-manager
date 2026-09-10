@@ -17,6 +17,48 @@ function createEvent(PDO $pdo, int $userId, string $name): int
 }
 
 /**
+ * Kontoinfos des Nutzers (E-Mail, Mitglied seit) fürs Dashboard.
+ */
+function getUserAccountInfo(PDO $pdo, int $userId): ?array
+{
+    $stmt = $pdo->prepare('SELECT email, created_at FROM users WHERE id = :id');
+    $stmt->execute(['id' => $userId]);
+    $row = $stmt->fetch();
+
+    return $row ?: null;
+}
+
+/**
+ * Statistik-Kennzahlen für das Nutzer-Dashboard: Anzahl eigener Events,
+ * Anzahl abgelehnter Events, nächstes anstehendes Event (ab heute).
+ */
+function getUserDashboardStats(PDO $pdo, int $userId): array
+{
+    $countStmt = $pdo->prepare('SELECT COUNT(*) FROM events WHERE user_id = :user_id');
+    $countStmt->execute(['user_id' => $userId]);
+    $eventCount = (int) $countStmt->fetchColumn();
+
+    $rejectedStmt = $pdo->prepare('SELECT COUNT(*) FROM events WHERE user_id = :user_id AND rejected_at IS NOT NULL');
+    $rejectedStmt->execute(['user_id' => $userId]);
+    $rejectedCount = (int) $rejectedStmt->fetchColumn();
+
+    $nextEventStmt = $pdo->prepare(
+        'SELECT * FROM events
+         WHERE user_id = :user_id AND termin_date IS NOT NULL AND termin_date >= CURDATE()
+         ORDER BY termin_date ASC, termin_time ASC
+         LIMIT 1'
+    );
+    $nextEventStmt->execute(['user_id' => $userId]);
+    $nextEvent = $nextEventStmt->fetch() ?: null;
+
+    return [
+        'eventCount' => $eventCount,
+        'rejectedCount' => $rejectedCount,
+        'nextEvent' => $nextEvent,
+    ];
+}
+
+/**
  * Gibt alle Events eines Nutzers zurück (für die "Meine Events"-Liste).
  */
 function getUserEvents(PDO $pdo, int $userId): array
@@ -92,8 +134,8 @@ function loadEventData(PDO $pdo, int $eventId): array
     }
 
     $row['unterhaltung'] = json_decode($row['unterhaltung'] ?? '[]', true) ?: [];
-    $row['mobilliar']    = json_decode($row['mobilliar'] ?? '[]', true) ?: [];
-    $row['energie']      = json_decode($row['energie'] ?? '[]', true) ?: [];
+    $row['mobilliar'] = json_decode($row['mobilliar'] ?? '[]', true) ?: [];
+    $row['energie'] = json_decode($row['energie'] ?? '[]', true) ?: [];
 
     return $row;
 }
@@ -110,12 +152,19 @@ function loadEventData(PDO $pdo, int $eventId): array
 function saveEventData(PDO $pdo, int $eventId, array $fields): void
 {
     $allowed = [
-        'name', 'unterhaltung', 'mobilliar', 'menue', 'energie',
-        'termin_date', 'termin_time', 'termin_endtime', 'termin_notes',
+        'name',
+        'unterhaltung',
+        'mobilliar',
+        'menue',
+        'energie',
+        'termin_date',
+        'termin_time',
+        'termin_endtime',
+        'termin_notes',
     ];
 
     $setParts = [];
-    $params   = ['id' => $eventId];
+    $params = ['id' => $eventId];
 
     foreach ($fields as $key => $value) {
         if (!in_array($key, $allowed, true)) {
@@ -132,7 +181,7 @@ function saveEventData(PDO $pdo, int $eventId, array $fields): void
         return;
     }
 
-    $sql  = 'UPDATE events SET ' . implode(', ', $setParts) . ' WHERE id = :id';
+    $sql = 'UPDATE events SET ' . implode(', ', $setParts) . ' WHERE id = :id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 }
@@ -140,6 +189,25 @@ function saveEventData(PDO $pdo, int $eventId, array $fields): void
 // ============================================
 // Admin-Funktionen
 // ============================================
+
+/**
+ * Das Event mit dem frühesten Termin-Datum (über alle Nutzer hinweg).
+ * Events ohne gesetztes Datum werden ignoriert. Gibt null zurück, falls
+ * kein Event einen Termin hat.
+ */
+function getEarliestEvent(PDO $pdo): ?array
+{
+    $sql = 'SELECT ev.*, u.email AS owner_email
+            FROM events ev
+            JOIN users u ON u.id = ev.user_id
+            WHERE ev.termin_date IS NOT NULL
+            ORDER BY ev.termin_date ASC, ev.termin_time ASC
+            LIMIT 1';
+
+    $row = $pdo->query($sql)->fetch();
+
+    return $row ?: null;
+}
 
 /**
  * Kennzahlen für das Admin-Dashboard.
@@ -176,11 +244,37 @@ function getAllUsersWithEventCounts(PDO $pdo): array
 }
 
 /**
+ * Lädt ein Event inkl. Besitzer-E-Mail für die Admin-Detailansicht.
+ * Gibt null zurück, falls das Event nicht existiert.
+ */
+function getEventForAdmin(PDO $pdo, int $eventId): ?array
+{
+    $stmt = $pdo->prepare(
+        'SELECT ev.*, u.email AS owner_email
+         FROM events ev
+         JOIN users u ON u.id = ev.user_id
+         WHERE ev.id = :id'
+    );
+    $stmt->execute(['id' => $eventId]);
+    $row = $stmt->fetch();
+
+    if (!$row) {
+        return null;
+    }
+
+    $row['unterhaltung'] = json_decode($row['unterhaltung'] ?? '[]', true) ?: [];
+    $row['mobilliar'] = json_decode($row['mobilliar'] ?? '[]', true) ?: [];
+    $row['energie'] = json_decode($row['energie'] ?? '[]', true) ?: [];
+
+    return $row;
+}
+
+/**
  * Alle Events aller Nutzer mit Besitzer-E-Mail, für die Event-Verwaltung.
  */
 function getAllEventsWithOwner(PDO $pdo): array
 {
-    $sql = 'SELECT ev.id, ev.name, ev.termin_date, ev.created_at, u.email AS owner_email
+    $sql = 'SELECT ev.id, ev.name, ev.termin_date, ev.created_at, ev.rejected_at, u.email AS owner_email
             FROM events ev
             JOIN users u ON u.id = ev.user_id
             ORDER BY ev.created_at DESC';
@@ -205,6 +299,28 @@ function deleteUserAsAdmin(PDO $pdo, int $userId): void
 {
     $stmt = $pdo->prepare('DELETE FROM users WHERE id = :id');
     $stmt->execute(['id' => $userId]);
+}
+
+/**
+ * Lehnt ein Event mit Begründung ab.
+ */
+function rejectEvent(PDO $pdo, int $eventId, string $reason): void
+{
+    $stmt = $pdo->prepare(
+        'UPDATE events SET rejected_at = NOW(), rejection_reason = :reason WHERE id = :id'
+    );
+    $stmt->execute(['reason' => trim($reason), 'id' => $eventId]);
+}
+
+/**
+ * Nimmt die Ablehnung eines Events wieder zurück.
+ */
+function unrejectEvent(PDO $pdo, int $eventId): void
+{
+    $stmt = $pdo->prepare(
+        'UPDATE events SET rejected_at = NULL, rejection_reason = NULL WHERE id = :id'
+    );
+    $stmt->execute(['id' => $eventId]);
 }
 
 /**

@@ -49,6 +49,7 @@ $menue = $data['menue'];
 
             <div style="text-align:center; margin-top:30px;">
                 <button type="submit" class="save-btn">Speichern</button>
+                <a href="../energieversorgung/index.php" class="next-link">Weiter zu Energieversorgung →</a>
             </div>
         </form>
     </main>
