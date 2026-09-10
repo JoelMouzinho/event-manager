@@ -11,6 +11,7 @@
         <?php if (isLoggedIn()): ?>
             <nav>
                 <ul>
+                    <li><a href="../ort/index.php">Ort</a></li>
                     <li><a href="../unterhaltung/index.php">Unterhaltung</a></li>
                     <li><a href="../mobilliar/index.php">Mobilliar</a></li>
                     <li><a href="../menue/index.php">Menü</a></li>

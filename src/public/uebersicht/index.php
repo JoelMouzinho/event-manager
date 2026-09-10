@@ -10,6 +10,14 @@ $userId = currentUserId();
 $eventId = getCurrentEventId($pdo, $userId);
 $data = loadEventData($pdo, $eventId);
 
+$ortLabels = [
+    'zuhause' => '🏠 Zuhause',
+    'veranstaltungsraum' => '🏢 Veranstaltungsraum',
+    'restaurant' => '🍽️ Restaurant',
+    'draussen' => '🌳 Draußen',
+    'hotel' => '🏨 Hotel',
+    'anderer_ort' => '📍 Anderer Ort',
+];
 $unterhaltungLabels = [
     'sound' => '🎵 Sound / Musik',
     'tv' => '📺 TV / Filme',
@@ -55,6 +63,15 @@ $energieLabels = [
         </section>
 
         <section class="features">
+
+            <div class="overview-card">
+                <h3>📍 Ort</h3>
+                <?php if (!empty($data['ort'])): ?>
+                    <p><?= htmlspecialchars($ortLabels[$data['ort']] ?? $data['ort']) ?></p>
+                <?php else: ?>
+                    <p class="overview-empty">Kein Ort gewählt</p>
+                <?php endif; ?>
+            </div>
 
             <div class="overview-card">
                 <h3>🎉 Unterhaltung</h3>

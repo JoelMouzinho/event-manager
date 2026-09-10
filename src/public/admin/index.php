@@ -49,7 +49,8 @@ $earliestEvent = getEarliestEvent($pdo);
             <div class="overview-card">
                 <h3>✅ Aktive Planer</h3>
                 <p style="font-size:32px; font-weight:bold; color:var(--primary-color);">
-                    <?= $stats['usersWithEvents'] ?></p>
+                    <?= $stats['usersWithEvents'] ?>
+                </p>
                 <p class="overview-empty">Nutzer mit mind. 1 Event</p>
             </div>
 

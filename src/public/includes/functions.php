@@ -169,6 +169,7 @@ function saveEventData(PDO $pdo, int $eventId, array $fields): void
 {
     $allowed = [
         'name',
+        'ort',
         'unterhaltung',
         'mobilliar',
         'menue',

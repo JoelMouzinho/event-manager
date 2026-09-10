@@ -115,31 +115,48 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
                         Profil bearbeiten
                     </button>
 
-                    <div class="profile-edit-panel" id="profile-edit-panel">
-                        <form method="post" action="index.php" class="profile-form">
-                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
-                            <input type="hidden" name="action" value="update_profile">
+                    <div class="profile-modal" id="profile-modal" aria-hidden="true">
+                        <div class="profile-modal-backdrop" id="profile-modal-backdrop"></div>
 
-                            <label for="first_name">Vorname</label>
-                            <input type="text" id="first_name" name="first_name"
-                                value="<?= htmlspecialchars($account['first_name'] ?? '') ?>" placeholder="Vorname"
-                                maxlength="100">
+                        <div class="profile-modal-content" role="dialog" aria-modal="true"
+                            aria-labelledby="profile-modal-title">
+                            <button type="button" class="profile-modal-close" id="profile-modal-close"
+                                aria-label="Modal schließen">
+                                &times;
+                            </button>
 
-                            <label for="last_name">Nachname</label>
-                            <input type="text" id="last_name" name="last_name"
-                                value="<?= htmlspecialchars($account['last_name'] ?? '') ?>" placeholder="Nachname"
-                                maxlength="100">
+                            <h2 id="profile-modal-title">Profil bearbeiten</h2>
+                            <p class="profile-modal-subtitle">
+                                Aktualisiere deinen Vor- und Nachnamen.
+                            </p>
 
-                            <div class="profile-form-actions">
-                                <button type="submit" class="save-btn">Speichern</button>
-                                <button type="button" class="profile-cancel-btn" id="profile-edit-cancel">
-                                    Abbrechen
-                                </button>
-                            </div>
-                        </form>
+                            <form method="post" action="index.php" class="profile-form">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+                                <input type="hidden" name="action" value="update_profile">
+
+                                <label for="first_name">Vorname</label>
+                                <input type="text" id="first_name" name="first_name"
+                                    value="<?= htmlspecialchars($account['first_name'] ?? '') ?>" placeholder="Vorname"
+                                    maxlength="100">
+
+                                <label for="last_name">Nachname</label>
+                                <input type="text" id="last_name" name="last_name"
+                                    value="<?= htmlspecialchars($account['last_name'] ?? '') ?>" placeholder="Nachname"
+                                    maxlength="100">
+
+                                <div class="profile-form-actions">
+                                    <button type="button" class="profile-cancel-btn" id="profile-modal-cancel">
+                                        Abbrechen
+                                    </button>
+
+                                    <button type="submit" class="save-btn">
+                                        Speichern
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
         </section>
 
         <section class="intro" style="margin-top:50px;">
@@ -192,23 +209,41 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
 
     <script src="../js/theme-toggle.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.getElementById('profile-edit-toggle');
-            const panel = document.getElementById('profile-edit-panel');
-            const cancel = document.getElementById('profile-edit-cancel');
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggle = document.getElementById('profile-edit-toggle');
+            const modal = document.getElementById('profile-modal');
+            const close = document.getElementById('profile-modal-close');
+            const cancel = document.getElementById('profile-modal-cancel');
+            const backdrop = document.getElementById('profile-modal-backdrop');
 
-            if (!toggle || !panel) {
-                return;
+            if (!toggle || !modal) {
+            return;
+        }
+
+            function openModal() {
+                modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+        }
+
+            function closeModal() {
+                modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        }
+
+            toggle.addEventListener('click', openModal);
+            close?.addEventListener('click', closeModal);
+            cancel?.addEventListener('click', closeModal);
+            backdrop?.addEventListener('click', closeModal);
+
+        // Modal mit Escape schließen
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modal.classList.contains('open')) {
+                closeModal();
             }
-
-            toggle.addEventListener('click', () => {
-                panel.classList.toggle('open');
-            });
-
-            cancel?.addEventListener('click', () => {
-                panel.classList.remove('open');
-            });
         });
+    });
     </script>
 </body>
 

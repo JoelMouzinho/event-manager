@@ -243,7 +243,7 @@ main {
 
 /* Ganze Karte einfärben: Label selbst mit :has, modern */
 .feature:has(input[type="checkbox"]:checked) {
-    background-color: #4CAF50;
+    background-color: var(--primary-color);
     /* grün */
     color: white;
 }
@@ -1262,32 +1262,189 @@ body.landing-page {
     }
 }
 
+/* ============================================
+   Profil bearbeiten – Modal
+   ============================================ */
+
 .profile-edit-btn {
     margin-top: 10px;
-    padding: 8px 14px;
+    padding: 9px 16px;
+
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 9px;
+
     background-color: var(--sidebar-btn);
     color: var(--text);
+
+    font-family: inherit;
+    font-size: 14px;
     font-weight: 600;
+
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
 }
 
 .profile-edit-btn:hover {
     background-color: var(--primary-color);
+    border-color: var(--primary-color);
     color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
 }
 
-.profile-edit-panel {
+.profile-edit-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* ============================================
+   Modal Hintergrund
+   ============================================ */
+
+.profile-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
     display: none;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border);
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
 }
 
-.profile-edit-panel.open {
-    display: block;
+.profile-modal.open {
+    display: flex;
 }
+
+
+/* Dunkler Hintergrund */
+
+.profile-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    animation: profileBackdropIn 0.2s ease;
+}
+
+
+/* ============================================
+   Modal Fenster
+   ============================================ */
+
+.profile-modal-content {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 450px;
+
+    padding: 32px;
+
+    background-color: var(--card);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25),
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+    animation: profileModalIn 0.22s ease-out;
+}
+
+
+/* Überschrift */
+
+.profile-modal-content h2 {
+    margin: 0 35px 6px 0;
+
+    color: var(--text);
+
+    font-size: 1.5rem;
+    line-height: 1.3;
+}
+
+
+/* Beschreibung */
+
+.profile-modal-subtitle {
+    margin: 0 0 25px;
+
+    color: var(--text);
+
+    font-size: 14px;
+    opacity: 0.65;
+}
+
+
+/* ============================================
+   Schließen-Button
+   ============================================ */
+
+.profile-modal-close {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    background: transparent;
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    opacity: 0.65;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease,
+        transform 0.15s ease;
+}
+
+.profile-modal-close:hover {
+    background-color: var(--sidebar-btn);
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.profile-modal-close:active {
+    transform: scale(0.9);
+}
+
+
+/* ============================================
+   Profil-Formular
+   ============================================ */
 
 .profile-form {
     display: flex;
@@ -1295,22 +1452,234 @@ body.landing-page {
     gap: 8px;
 }
 
+
+/* Labels */
+
+.profile-form label {
+    margin-top: 5px;
+
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ============================================
+   Schöne Input-Felder
+   ============================================ */
+
 .profile-form input {
     width: 100%;
-    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background-color: var(--bg);
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.15s ease;
 }
+
+
+/* Placeholder */
+
+.profile-form input::placeholder {
+    color: var(--text);
+    opacity: 0.4;
+}
+
+
+/* Hover */
+
+.profile-form input:hover {
+    border-color: var(--primary-color);
+}
+
+
+/* Fokus */
+
+.profile-form input:focus {
+    border-color: var(--primary-color);
+
+    background-color: var(--card);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 107, 53, 0.12);
+
+    transform: translateY(-1px);
+}
+
+
+/* ============================================
+   Formular Buttons
+   ============================================ */
 
 .profile-form-actions {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 20px;
 }
 
+
+/* Abbrechen */
+
 .profile-cancel-btn {
-    padding: 8px 14px;
+    padding: 10px 18px;
+
     border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
+    border-radius: 9px;
+
+    background-color: transparent;
     color: var(--text);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.profile-cancel-btn:hover {
+    background-color: var(--sidebar-btn);
+    border-color: var(--primary-color);
+    color: var(--text);
+}
+
+.profile-cancel-btn:active {
+    transform: scale(0.96);
+}
+
+
+/* Speichern */
+
+.profile-form-actions .save-btn {
+    padding: 10px 20px;
+}
+
+
+/* ============================================
+   Animationen
+   ============================================ */
+
+@keyframes profileBackdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes profileModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ============================================
+   Kein Scrollen hinter dem Modal
+   ============================================ */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+/* ============================================
+   Mobile
+   ============================================ */
+
+@media (max-width: 500px) {
+    .profile-modal {
+        padding: 15px;
+    }
+
+    .profile-modal-content {
+        padding: 25px 20px;
+        border-radius: 14px;
+    }
+
+    .profile-modal-content h2 {
+        font-size: 1.35rem;
+    }
+
+    .profile-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .profile-form-actions .save-btn,
+    .profile-cancel-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ============================================
+   Ort-Auswahl
+   ============================================ */
+
+.feature input[type="radio"] {
+    display: none;
+}
+
+/* Ausgewählte Ortskarte */
+
+.feature:has(input[type="radio"]:checked) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 18px rgba(255, 107, 53, 0.3);
+}
+
+/* Überschrift der ausgewählten Karte */
+
+.feature:has(input[type="radio"]:checked) h3 {
+    color: white;
+}
+
+/* Text der ausgewählten Karte */
+
+.feature:has(input[type="radio"]:checked) p {
+    color: white;
+}
+
+/* Hover bei Ortskarten */
+
+.feature:has(input[type="radio"]) {
+    cursor: pointer;
+}
+
+.feature:has(input[type="radio"]):hover {
+    transform: translateY(-5px);
 }

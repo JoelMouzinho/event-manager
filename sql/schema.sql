@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS events (
     name VARCHAR(255) NOT NULL DEFAULT 'Mein Event',
     session_id VARCHAR(64) NULL,
     user_id INT NOT NULL,
+    ort VARCHAR(32) DEFAULT NULL,
     unterhaltung JSON DEFAULT NULL,
     mobilliar JSON DEFAULT NULL,
     menue VARCHAR(255) DEFAULT NULL,

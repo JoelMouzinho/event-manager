@@ -39,6 +39,10 @@ $data = loadEventData($pdo, $eventId);
         <?php endif; ?>
 
         <section class="features">
+            <a href="../ort/index.php" class="feature">
+                <h3>Ort</h3>
+                <p>Wähle den Ort für dein Event aus.</p>
+            </a>
             <a href="../unterhaltung/index.php" class="feature">
                 <h3>Unterhaltung</h3>
                 <p>Wähle passende Unterhaltung für dein Event aus.</p>
