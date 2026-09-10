@@ -14,12 +14,10 @@ if (isLoggedIn()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event-Manager</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/x-icon" href="assets/icon32x32nameless.png">
 </head>
 <body class="landing-page">
     <main class="landing">
         <section class="landing-card">
-            <img class="landing-logo" src="assets/icon32x32.png" alt="Event-Manager">
             <p class="landing-eyebrow">EVENT-MANAGER</p>
             <h1>Plane dein Event.<br><span>Einfach & übersichtlich.</span></h1>
             <p class="landing-text">

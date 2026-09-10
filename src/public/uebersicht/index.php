@@ -47,9 +47,8 @@ $energieLabels = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Übersicht - Eventplaner</title>
+    <title>Übersicht - Event-Manager</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="icon" type="image/x-icon" href="../assets/icon32x32nameless.png">
 </head>
 
 <body>
