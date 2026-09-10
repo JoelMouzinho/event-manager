@@ -3,7 +3,6 @@
 -- ============================================
 CREATE DATABASE IF NOT EXISTS eventplaner CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE eventplaner;
-
 -- Benutzer zuerst anlegen, da events.user_id darauf verweist.
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS users (
     is_admin TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL DEFAULT 'Mein Event',
@@ -28,9 +26,8 @@ CREATE TABLE IF NOT EXISTS events (
     termin_notes TEXT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    rejected_at TIMESTAMP NULL DEFAULT NULL,
+    rejection_reason TEXT NULL DEFAULT NULL,
     INDEX idx_events_user_id (user_id),
-    CONSTRAINT fk_events_user
-        FOREIGN KEY (user_id) REFERENCES users(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    CONSTRAINT fk_events_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

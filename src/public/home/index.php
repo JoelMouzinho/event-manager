@@ -31,6 +31,13 @@ $data = loadEventData($pdo, $eventId);
             <p><a href="../events/index.php" class="back-link">← Zurück zu Meine Events</a></p>
         </section>
 
+        <?php if ($data['rejected_at']): ?>
+            <div class="reject-banner">
+                <p><strong>⚠️ Dieses Event wurde abgelehnt.</strong></p>
+                <p style="margin-top:8px;">📝 <?= nl2br(htmlspecialchars($data['rejection_reason'])) ?></p>
+            </div>
+        <?php endif; ?>
+
         <section class="features">
             <a href="../unterhaltung/index.php" class="feature">
                 <h3>Unterhaltung</h3>

@@ -71,6 +71,7 @@ $data = loadEventData($pdo, $eventId);
 
             <div style="text-align:center; margin-top:30px;">
                 <button type="submit" class="save-btn">Speichern</button>
+                <a href="../uebersicht/index.php" class="next-link">Weiter zu Übersicht →</a>
             </div>
         </form>
     </main>

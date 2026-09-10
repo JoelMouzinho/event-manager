@@ -50,6 +50,7 @@ $events = getAllEventsWithOwner($pdo);
                         <th>Event</th>
                         <th>Besitzer</th>
                         <th>Termin</th>
+                        <th>Status</th>
                         <th>Angelegt am</th>
                         <th>Aktionen</th>
                     </tr>
@@ -57,17 +58,30 @@ $events = getAllEventsWithOwner($pdo);
                 <tbody>
                     <?php if (empty($events)): ?>
                         <tr>
-                            <td colspan="5" class="overview-empty" style="text-align:center;">Es existieren noch keine Events.</td>
+                            <td colspan="6" class="overview-empty" style="text-align:center;">Es existieren noch keine
+                                Events.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($events as $event): ?>
                             <tr>
-                                <td><?= htmlspecialchars($event['name']) ?></td>
+                                <td><a href="event-detail.php?event_id=<?= (int) $event['id'] ?>"
+                                        style="color:inherit; font-weight:bold;"><?= htmlspecialchars($event['name']) ?></a>
+                                </td>
                                 <td><?= htmlspecialchars($event['owner_email']) ?></td>
                                 <td><?= $event['termin_date'] ? htmlspecialchars($event['termin_date']) : '—' ?></td>
+                                <td>
+                                    <?php if ($event['rejected_at']): ?>
+                                        <span class="status-badge rejected">Abgelehnt</span>
+                                    <?php else: ?>
+                                        <span class="overview-empty">Aktiv</span>
+                                    <?php endif; ?>
+                                </td>
                                 <td><?= htmlspecialchars($event['created_at']) ?></td>
                                 <td class="admin-actions">
-                                    <form method="post" action="events.php" onsubmit="return confirm('Dieses Event wirklich löschen?');">
+                                    <a href="event-detail.php?event_id=<?= (int) $event['id'] ?>"
+                                        class="admin-link-btn">Details</a>
+                                    <form method="post" action="events.php"
+                                        onsubmit="return confirm('Dieses Event wirklich löschen?');">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="event_id" value="<?= (int) $event['id'] ?>">

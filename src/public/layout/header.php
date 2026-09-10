@@ -1,16 +1,4 @@
 <header>
-    <?php
-    $currentPage = basename(dirname($_SERVER['SCRIPT_FILENAME']));
-    $navItems = [
-        ['path' => '../events/index.php', 'label' => 'Meine Events', 'page' => 'events'],
-        ['path' => '../unterhaltung/index.php', 'label' => 'Unterhaltung', 'page' => 'unterhaltung'],
-        ['path' => '../mobilliar/index.php', 'label' => 'Mobilliar', 'page' => 'mobilliar'],
-        ['path' => '../menue/index.php', 'label' => 'Menü', 'page' => 'menue'],
-        ['path' => '../energieversorgung/index.php', 'label' => 'Energieversorgung', 'page' => 'energieversorgung'],
-        ['path' => '../termin/index.php', 'label' => 'Termin', 'page' => 'termin'],
-        ['path' => '../uebersicht/index.php', 'label' => 'Übersicht', 'page' => 'uebersicht'],
-    ];
-    ?>
     <div class="logo-title">
         <a href="<?= isLoggedIn() ? '../home/index.php' : '../index.php' ?>">
             <img src="../assets/icon32x32.png" alt="Event-Manager">
@@ -21,16 +9,14 @@
         </a>
 
         <?php if (isLoggedIn()): ?>
-            <nav aria-label="Hauptnavigation">
+            <nav>
                 <ul>
-                    <?php foreach ($navItems as $item): ?>
-                        <li>
-                            <a href="<?= $item['path'] ?>" class="<?= $currentPage === $item['page'] ? 'active' : '' ?>"
-                                <?= $currentPage === $item['page'] ? 'aria-current="page"' : '' ?>>
-                                <?= htmlspecialchars($item['label']) ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                    <li><a href="../unterhaltung/index.php">Unterhaltung</a></li>
+                    <li><a href="../mobilliar/index.php">Mobilliar</a></li>
+                    <li><a href="../menue/index.php">Menü</a></li>
+                    <li><a href="../energieversorgung/index.php">Energieversorgung</a></li>
+                    <li><a href="../termin/index.php">Termin</a></li>
+                    <li><a href="../uebersicht/index.php">Übersicht</a></li>
                 </ul>
             </nav>
         <?php endif; ?>
@@ -38,6 +24,23 @@
 
     <?php if (isLoggedIn()): ?>
         <div class="user-menu">
+            <div class="quick-add-menu">
+                <button id="quick-add-toggle" class="quick-add-btn" type="button" aria-label="Neues Event anlegen"
+                    aria-expanded="false" title="Neues Event anlegen">
+                    +
+                </button>
+
+                <div id="quick-add-panel" class="quick-add-panel">
+                    <form method="post" action="../events/quick-create.php">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+                        <label for="quick-event-name">Neues Event</label>
+                        <input type="text" id="quick-event-name" name="event_name" placeholder="z.B. Geburtstag Lisa"
+                            autocomplete="off">
+                        <button type="submit" class="save-btn">Anlegen</button>
+                    </form>
+                </div>
+            </div>
+
             <button id="user-menu-toggle" class="burger-btn" type="button" aria-label="Benutzermenü öffnen"
                 aria-expanded="false">
                 <span></span>
@@ -53,6 +56,13 @@
                         <?= htmlspecialchars(currentUserEmail() ?? '') ?>
                     </span>
                 </div>
+
+                <div class="menu-divider"></div>
+
+                <a href="../events/index.php" class="dropdown-item">
+                    <span>📊</span>
+                    <span>Mein Dashboard</span>
+                </a>
 
                 <div class="menu-divider"></div>
 
@@ -82,4 +92,5 @@
 </header>
 
 <script src="../js/user-menu.js"></script>
+<script src="../js/quick-add.js"></script>
 <script src="../js/theme-toggle.js"></script>

@@ -88,8 +88,9 @@ function isChecked(array $selected, string $value): string
 
             </section>
 
-            <div style="text-align:center; margin-top:30px;">
+            <div class="step-nav">
                 <button type="submit" class="save-btn">Speichern</button>
+                <a href="../mobilliar/index.php" class="next-link">Weiter zu Mobiliar →</a>
             </div>
         </form>
     </main>
