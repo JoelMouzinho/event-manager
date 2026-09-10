@@ -64,6 +64,8 @@ $users = getAllUsersWithEventCounts($pdo);
             <table class="admin-table">
                 <thead>
                     <tr>
+                        <th>Name</th>
+                        <th>Vorname</th>
                         <th>E-Mail</th>
                         <th>Events</th>
                         <th>Registriert am</th>
@@ -74,6 +76,8 @@ $users = getAllUsersWithEventCounts($pdo);
                 <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
+                            <td><?= htmlspecialchars($user['last_name'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($user['first_name'] ?? '') ?></td>
                             <td><?= htmlspecialchars($user['email']) ?></td>
                             <td><?= (int) $user['event_count'] ?></td>
                             <td><?= htmlspecialchars($user['created_at']) ?></td>

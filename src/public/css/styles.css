@@ -1261,3 +1261,56 @@ body.landing-page {
         width: min(260px, calc(100vw - 30px));
     }
 }
+
+.profile-edit-btn {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--sidebar-btn);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-edit-btn:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.profile-edit-panel {
+    display: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.profile-edit-panel.open {
+    display: block;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-form input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.profile-cancel-btn {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}

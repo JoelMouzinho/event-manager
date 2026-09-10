@@ -12,6 +12,16 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCsrfToken($_POST['csrf_token'] ?? null)) {
         $error = 'Die Anfrage ist abgelaufen. Bitte versuche es erneut.';
+    } elseif (($_POST['action'] ?? '') === 'update_profile') {
+        updateUserProfile(
+            $pdo,
+            $userId,
+            $_POST['first_name'] ?? '',
+            $_POST['last_name'] ?? ''
+        );
+
+        header('Location: index.php');
+        exit;
     } elseif (($_POST['action'] ?? '') === 'create') {
         $eventId = createEvent($pdo, $userId, $_POST['event_name'] ?? '');
         $_SESSION['current_event_id'] = $eventId;
@@ -57,13 +67,15 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
             <div class="overview-card">
                 <h3>🎉 Meine Events</h3>
                 <p style="font-size:32px; font-weight:bold; color:var(--primary-color);">
-                    <?= $dashboardStats['eventCount'] ?></p>
+                    <?= $dashboardStats['eventCount'] ?>
+                </p>
             </div>
 
             <div class="overview-card">
                 <h3>🚫 Abgelehnt</h3>
                 <p style="font-size:32px; font-weight:bold; color:var(--primary-color);">
-                    <?= $dashboardStats['rejectedCount'] ?></p>
+                    <?= $dashboardStats['rejectedCount'] ?>
+                </p>
             </div>
 
             <?php if ($dashboardStats['nextEvent']): ?>
@@ -88,8 +100,44 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
             <?php if ($account): ?>
                 <div class="overview-card">
                     <h3>👤 Mein Konto</h3>
-                    <p><?= htmlspecialchars($account['email']) ?></p>
-                    <p class="overview-empty">Mitglied seit <?= htmlspecialchars($account['created_at']) ?></p>
+
+                    <?php if (!empty($account['first_name']) || !empty($account['last_name'])): ?>
+                        <p>
+                            <?= htmlspecialchars(trim(($account['first_name'] ?? '') . ' ' . ($account['last_name'] ?? ''))) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <p class="overview-empty">
+                        <?= htmlspecialchars($account['email']) ?>
+                    </p>
+
+                    <button type="button" class="profile-edit-btn" id="profile-edit-toggle">
+                        Profil bearbeiten
+                    </button>
+
+                    <div class="profile-edit-panel" id="profile-edit-panel">
+                        <form method="post" action="index.php" class="profile-form">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+                            <input type="hidden" name="action" value="update_profile">
+
+                            <label for="first_name">Vorname</label>
+                            <input type="text" id="first_name" name="first_name"
+                                value="<?= htmlspecialchars($account['first_name'] ?? '') ?>" placeholder="Vorname"
+                                maxlength="100">
+
+                            <label for="last_name">Nachname</label>
+                            <input type="text" id="last_name" name="last_name"
+                                value="<?= htmlspecialchars($account['last_name'] ?? '') ?>" placeholder="Nachname"
+                                maxlength="100">
+
+                            <div class="profile-form-actions">
+                                <button type="submit" class="save-btn">Speichern</button>
+                                <button type="button" class="profile-cancel-btn" id="profile-edit-cancel">
+                                    Abbrechen
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             <?php endif; ?>
         </section>
@@ -143,6 +191,25 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
     <?php include '../layout/footer.php'; ?>
 
     <script src="../js/theme-toggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('profile-edit-toggle');
+            const panel = document.getElementById('profile-edit-panel');
+            const cancel = document.getElementById('profile-edit-cancel');
+
+            if (!toggle || !panel) {
+                return;
+            }
+
+            toggle.addEventListener('click', () => {
+                panel.classList.toggle('open');
+            });
+
+            cancel?.addEventListener('click', () => {
+                panel.classList.remove('open');
+            });
+        });
+    </script>
 </body>
 
 </html>

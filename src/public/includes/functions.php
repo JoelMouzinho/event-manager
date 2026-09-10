@@ -21,11 +21,27 @@ function createEvent(PDO $pdo, int $userId, string $name): int
  */
 function getUserAccountInfo(PDO $pdo, int $userId): ?array
 {
-    $stmt = $pdo->prepare('SELECT email, created_at FROM users WHERE id = :id');
+    $stmt = $pdo->prepare('SELECT email, first_name, last_name, created_at FROM users WHERE id = :id');
     $stmt->execute(['id' => $userId]);
     $row = $stmt->fetch();
 
     return $row ?: null;
+}
+
+function updateUserProfile(PDO $pdo, int $userId, string $firstName, string $lastName): void
+{
+    $stmt = $pdo->prepare(
+        'UPDATE users
+        SET first_name = :first_name,
+            last_name = :last_name
+        WHERE id = :id'
+    );
+
+    $stmt->execute([
+        'first_name' => trim($firstName),
+        'last_name' => trim($lastName),
+        'id' => $userId,
+    ]);
 }
 
 /**
@@ -234,10 +250,10 @@ function getAdminStats(PDO $pdo): array
  */
 function getAllUsersWithEventCounts(PDO $pdo): array
 {
-    $sql = 'SELECT u.id, u.email, u.is_admin, u.created_at, COUNT(e.id) AS event_count
+    $sql = 'SELECT u.id, u.email, u.first_name, u.last_name, u.is_admin, u.created_at, COUNT(e.id) AS event_count
             FROM users u
             LEFT JOIN events e ON e.user_id = u.id
-            GROUP BY u.id, u.email, u.is_admin, u.created_at
+            GROUP BY u.id, u.email, u.first_name, u.last_name, u.is_admin, u.created_at
             ORDER BY u.created_at DESC';
 
     return $pdo->query($sql)->fetchAll();
