@@ -28,7 +28,7 @@ $data = loadEventData($pdo, $eventId);
         <section class="intro">
             <h2><?= htmlspecialchars($data['name']) ?></h2>
             <p>Nutze die Navigation, um alle Bereiche deines Events zu planen.</p>
-            <p><a href="../events/index.php" class="back-link">← Zurück zu Meine Events</a></p>
+            <p><a href="../events/index.php" class="back-link">← Zurück zu Mein Dashboard</a></p>
         </section>
 
         <?php if ($data['rejected_at']): ?>

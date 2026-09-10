@@ -126,7 +126,7 @@ $energieLabels = [
 
         <div class="step-nav">
             <a href="../events/index.php" class="save-btn" style="text-decoration:none; display:inline-block;">✅ Fertig
-                – zu Meine Events</a>
+                – zu Mein Dashboard</a>
         </div>
 
     </main>
