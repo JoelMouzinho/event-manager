@@ -44,7 +44,7 @@ $dashboardStats = getUserDashboardStats($pdo, $userId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mein Dashboard - Event-Manager</title>
+    <title>Mein Dashboard - Party-Organizer</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 

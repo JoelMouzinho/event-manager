@@ -4,7 +4,7 @@
         </a>
 
         <a href="<?= isLoggedIn() ? '../home/index.php' : '../index.php' ?>">
-            <h1>ITKFA Event-Manager</h1>
+            <h1>ITKFA Party-Organizer</h1>
         </a>
 
         <?php if (isLoggedIn()): ?>

@@ -12,13 +12,13 @@ if (isLoggedIn()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event-Manager</title>
+    <title>Party-Organizer</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="landing-page">
     <main class="landing">
         <section class="landing-card">
-            <p class="landing-eyebrow">EVENT-MANAGER</p>
+            <p class="landing-eyebrow">PARTY-ORGANIZER</p>
             <h1>Plane dein Event.<br><span>Einfach & übersichtlich.</span></h1>
             <p class="landing-text">
                 Erstelle dein persönliches Event, wähle Unterhaltung, Mobiliar,
